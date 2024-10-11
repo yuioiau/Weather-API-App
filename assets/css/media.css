@@ -1,0 +1,33 @@
+@media (max-width: 768px) {
+    .navbar {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    .group {
+        width: 100% !important;
+    }
+
+    .switcher-panel.open {
+        right: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .switcher-panel {
+        width: 180px;
+    }
+
+    .color-options li {
+        width: 20px;
+        height: 20px;
+    }
+}

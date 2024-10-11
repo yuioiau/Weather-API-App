@@ -1,0 +1,166 @@
+:root {
+  --main-color: #17a2b8;
+  --dark-color: #343a40;
+  --text-color: #ffffff;
+  --focus-color: #ffc107;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.navbar {
+    background-color: var(--dark-color) !important;
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.btn-primary:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+#weatherResult {
+    transition: all 0.3s ease;
+}
+
+#weatherIcon {
+    width: 50px;
+    height: 50px;
+}
+
+#feelsLike, #uv {
+    margin-bottom: 5px;
+}
+
+#weatherIcon {
+    width: 64px;
+    height: 64px;
+}
+
+.theme-switcher {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+.switcher-btn {
+    background: var(--main-color);
+    color: #fff;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.switcher-panel {
+    background: #fff;
+    color: #000;
+    padding: 15px;
+    border-radius: 5px;
+    position: absolute;
+    right: -200px;
+    top: 0;
+    width: 200px;
+    transition: right 0.3s ease;
+}
+
+.switcher-panel.open {
+    right: 40px;
+}
+
+.color-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.color-options li {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.color-options li.active {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px var(--main-color);
+}
+
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark-mode .card {
+    background-color: #2c2c2c;
+    color: #ffffff;
+}
+
+body.dark-mode .switcher-panel {
+    background-color: #2c2c2c;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .switcher-panel.open {
+        right: 30px;
+    }
+}
+
+.weather-day {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+}
+
+.weather-day:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.current-day {
+    background-color: rgba(var(--main-color-rgb), 0.2);
+    border: 2px solid var(--main-color);
+}
+
+.weather-icon {
+    width: 64px;
+    height: 64px;
+    margin: 10px 0;
+}
+
+#cityName {
+    color: var(--main-color);
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+

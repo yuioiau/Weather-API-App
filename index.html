@@ -1,0 +1,164 @@
+<!-- ^* <<===== Route Academy =====>> -->
+<!-- ^* <<===== JS Assignment 4 =====>> -->
+<!-- ^* <<===== Name: Fady Milad Shafik =====>> -->
+<!-- ^* <<===== Group: (Front-End) C44 Sun&Wed 5PM Online =====>> -->
+<!-- ^* <<===== Project: Login System =====>> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Route Weather</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="assets/images/logo.png" alt="Route Weather Logo" height="30">
+                Route Weather
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Weather Forecast</h2>
+                        <form id="weatherForm">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="cityInput" placeholder="Enter city name" required>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Weather Result Card -->
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                <div id="weatherResult" class="card d-none">
+                    <div class="card-body">
+                        <h3 class="card-title text-center" id="cityName"></h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="weather-day text-center">
+                                    <h5>Yesterday</h5>
+                                    <img id="yesterdayIcon" src="" alt="Yesterday's Weather" class="weather-icon">
+                                    <p id="yesterdayTemp"></p>
+                                    <p id="yesterdayDesc"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="weather-day text-center current-day">
+                                    <h5>Today</h5>
+                                    <img id="todayIcon" src="" alt="Today's Weather" class="weather-icon">
+                                    <p id="todayTemp"></p>
+                                    <p id="todayDesc"></p>
+                                    <p id="humidity"></p>
+                                    <p id="windSpeed"></p>
+                                    <p id="feelsLike"></p>
+                                    <p id="uv"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="weather-day text-center">
+                                    <h5>Tomorrow</h5>
+                                    <img id="tomorrowIcon" src="" alt="Tomorrow's Weather" class="weather-icon">
+                                    <p id="tomorrowTemp"></p>
+                                    <p id="tomorrowDesc"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <div class="container">
+            <p>&copy; 2024 Route Weather. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Sign Up Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="signupName" placeholder="Enter your name" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="signupPassword" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Switcher -->
+    <div id="theme-switcher" class="theme-switcher">
+        <div class="switcher-btn">
+            <i class="fas fa-cog"></i>
+        </div>
+        <div class="switcher-panel">
+            <h6>Theme Colors</h6>
+            <ul class="color-options">
+                <li data-color="#17a2b8" class="active"></li>
+                <li data-color="#28a745"></li>
+                <li data-color="#ffc107"></li>
+                <li data-color="#dc3545"></li>
+                <li data-color="#6f42c1"></li>
+            </ul>
+            <hr>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/weather.js"></script>
+    <script src="assets/js/theme-switcher.js"></script>
+</body>
+</html>
