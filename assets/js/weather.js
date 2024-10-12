@@ -1,11 +1,10 @@
-const API_KEY = '44d0589fb95647e7bbd164754240710'; // Replace with your actual WeatherAPI key
+const API_KEY = '44d0589fb95647e7bbd164754240710';
 const cityInput = document.getElementById('cityInput');
 const weatherResult = document.getElementById('weatherResult');
 
 let debounceTimer;
 let lastValidCity = "Cairo"; // Store the last valid city
 
-// Remove the getUserLocationAndWeather function
 
 // Call this function when the page loads with a default city
 document.addEventListener('DOMContentLoaded', () => getWeatherData(lastValidCity));
@@ -140,7 +139,7 @@ function setTimeIcon(hour) {
     }
 }
 
-// Optional: Implement sign-up functionality
+// Implement sign-up functionality
 const signupForm = document.getElementById('signupForm');
 signupForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -273,7 +272,7 @@ function showSuccessToast(message) {
     }
 }
 
-// Add this new function at the end of the file
+// Scroll functionality
 function addWheelScrolling() {
     const scrollWrapper = document.querySelector('.forecast-scroll-wrapper');
     scrollWrapper.addEventListener('wheel', (e) => {
