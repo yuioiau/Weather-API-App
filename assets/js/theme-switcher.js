@@ -73,6 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentDay) {
       currentDay.style.borderColor = mainColor;
     }
+
+    // Update weather card colors
+    const weatherCards = document.querySelectorAll('.weather-card');
+    weatherCards.forEach(card => {
+      card.style.setProperty('--main-color', mainColor);
+    });
   }
 
   function updateButtonColors() {
@@ -122,14 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
         footerInput.classList.add('bg-dark', 'text-white');
         footerInput.classList.remove('bg-light', 'text-dark');
       }
-      if (weatherResult) {
-        weatherResult.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-        weatherResult.style.color = '#fff';
-      }
-      weatherCards.forEach(card => {
-        card.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-        card.style.color = '#fff';
-      });
     } else {
       navbar.classList.add('navbar-light', 'bg-light');
       navbar.classList.remove('navbar-dark', 'bg-dark');
@@ -143,14 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
         footerInput.classList.add('bg-light', 'text-dark');
         footerInput.classList.remove('bg-dark', 'text-white');
       }
-      if (weatherResult) {
-        weatherResult.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-        weatherResult.style.color = '#333';
-      }
-      weatherCards.forEach(card => {
-        card.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-        card.style.color = '#333';
-      });
     }
 
     updateModeLabel(isDarkMode);
