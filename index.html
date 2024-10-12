@@ -20,19 +20,30 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="assets/images/logo.png" alt="Route Weather Logo" height="30">
-                Route Weather
+                <i class="fa-solid fa-cloud-sun pe-2"></i>Weather
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">News</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Live cameras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Photos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
@@ -46,16 +57,10 @@
     <div class="container my-5">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title text-center mb-4">Weather Forecast</h2>
-                        <form id="weatherForm">
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="cityInput" placeholder="Enter city name" required>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                <form id="weatherForm">
+                    <input type="text" id="cityInput" placeholder="Find your location..." required>
+                    <button type="submit" id="findButton">Find</button>
+                </form>
             </div>
         </div>
         <!-- Weather Result Card -->
@@ -68,35 +73,8 @@
                             <p id="currentDateTime"></p>
                             <i id="timeIcon" class="fas fa-3x"></i>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="weather-day text-center current-day">
-                                    <h5 id="yesterdayDate"></h5>
-                                    <img id="yesterdayIcon" src="" alt="Yesterday's Weather" class="weather-icon">
-                                    <p id="yesterdayTemp"></p>
-                                    <p id="yesterdayDesc"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="weather-day text-center">
-                                    <h5 id="todayDate"></h5>
-                                    <img id="todayIcon" src="" alt="Today's Weather" class="weather-icon">
-                                    <p id="todayTemp"></p>
-                                    <p id="todayDesc"></p>
-                                    <p id="humidity"></p>
-                                    <p id="windSpeed"></p>
-                                    <p id="feelsLike"></p>
-                                    <p id="uv"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="weather-day text-center">
-                                    <h5 id="tomorrowDate"></h5>
-                                    <img id="tomorrowIcon" src="" alt="Tomorrow's Weather" class="weather-icon">
-                                    <p id="tomorrowTemp"></p>
-                                    <p id="tomorrowDesc"></p>
-                                </div>
-                            </div>
+                        <div id="forecastContainer" class="forecast-scroll">
+                            <!-- Weather cards will be dynamically inserted here -->
                         </div>
                     </div>
                 </div>
@@ -105,9 +83,31 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
+    <footer class="py-5">
         <div class="container">
-            <p>&copy; 2024 Route Weather. All rights reserved.</p>
+            <div class="row">
+                <div class="col-md-8">
+                    <form class="subscribe-form">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Enter your email to subscribe...">
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="social-icons text-md-end mt-3 mt-md-0">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <p class="mt-5">&copy; 2024 Route Academy. Designed by Fady Milad. All rights reserved</p>
+                </div>
+            </div>
         </div>
     </footer>
 

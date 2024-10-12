@@ -10,6 +10,20 @@ let lastValidCity = "Cairo"; // Store the last valid city
 // Call this function when the page loads with a default city
 document.addEventListener('DOMContentLoaded', () => getWeatherData(lastValidCity));
 
+// Add this at the beginning of the file, after other DOM content loaded listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const weatherForm = document.getElementById('weatherForm');
+    if (weatherForm) {
+        weatherForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const city = cityInput.value.trim();
+            if (city.length > 2) {
+                getWeatherData(city);
+            }
+        });
+    }
+});
+
 cityInput.addEventListener('input', () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
@@ -19,16 +33,13 @@ cityInput.addEventListener('input', () => {
         } else if (city.length === 0) {
             // If input is empty, use the last valid city
             getWeatherData(lastValidCity);
-        } else {
-            // Do nothing if input length is 1 or 2 characters
-            // This prevents the weather display from disappearing for short inputs
         }
     }, 300); // Wait for 300ms after the user stops typing
 });
 
 async function getWeatherData(location) {
     try {
-        const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${location}&days=3&aqi=no`);
+        const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${location}&days=14&aqi=no`);
         if (!response.ok) {
             throw new Error('Weather data not found');
         }
@@ -46,53 +57,76 @@ function displayWeatherData(data) {
     
     document.getElementById('cityName').textContent = `${location.name}, ${location.country}`;
     
-    // Display current date and time
     const now = new Date();
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
     
-    // Set time icon
     setTimeIcon(now.getHours());
     
-    // Yesterday's weather (current day)
-    updateDayWeather('yesterday', forecast.forecastday[0], current, true);
-    
-    // Today's weather
-    updateDayWeather('today', forecast.forecastday[1], null, false);
-    
-    // Tomorrow's weather
-    updateDayWeather('tomorrow', forecast.forecastday[2], null, false);
-    
+    const forecastContainer = document.getElementById('forecastContainer');
+    forecastContainer.innerHTML = '';
+
+    // Create a wrapper for horizontal scrolling
+    const scrollWrapper = document.createElement('div');
+    scrollWrapper.className = 'forecast-scroll-wrapper';
+    forecastContainer.appendChild(scrollWrapper);
+
+    // Current day (first day in the API response)
+    const currentDay = createWeatherCard(forecast.forecastday[0], current, true);
+    scrollWrapper.appendChild(currentDay);
+
+    // Next 13 days
+    for (let i = 1; i < forecast.forecastday.length; i++) {
+        const card = createWeatherCard(forecast.forecastday[i], null, false);
+        scrollWrapper.appendChild(card);
+    }
+
     weatherResult.classList.remove('d-none');
 }
 
-function updateDayWeather(day, forecastData, currentData = null, isCurrentDay = false) {
-    const dayElement = document.getElementById(`${day}Date`).closest('.weather-day');
-    const iconElement = document.getElementById(`${day}Icon`);
-    const tempElement = document.getElementById(`${day}Temp`);
-    const descElement = document.getElementById(`${day}Desc`);
-    const dateElement = document.getElementById(`${day}Date`);
-    
+function createWeatherCard(forecastData, currentData, isCurrentDay) {
+    const card = document.createElement('div');
+    card.className = `weather-card ${isCurrentDay ? 'current-day' : ''}`;
+
     const date = new Date(forecastData.date);
-    const options = { weekday: 'long', month: 'short', day: 'numeric' };
-    dateElement.textContent = date.toLocaleDateString('en-US', options);
-    
-    iconElement.src = `https:${forecastData.day.condition.icon}`;
-    
-    if (isCurrentDay && currentData) {
-        tempElement.textContent = `${currentData.temp_c}°C`;
-        descElement.textContent = currentData.condition.text;
-        document.getElementById('humidity').textContent = `Humidity: ${currentData.humidity}%`;
-        document.getElementById('windSpeed').textContent = `Wind: ${currentData.wind_kph} km/h`;
-        document.getElementById('feelsLike').textContent = `Feels like: ${currentData.feelslike_c}°C`;
-        document.getElementById('uv').textContent = `UV Index: ${currentData.uv}`;
-    } else {
-        tempElement.textContent = `${forecastData.day.avgtemp_c}°C`;
-        descElement.textContent = forecastData.day.condition.text;
-    }
-    
-    // Add or remove the 'current-day' class based on whether it's the current day
-    dayElement.classList.toggle('current-day', isCurrentDay);
+    const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+    const monthDay = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+    card.innerHTML = `
+        <h5>${dayName}</h5>
+        <p>${monthDay}</p>
+        <img src="https:${forecastData.day.condition.icon}" alt="${forecastData.day.condition.text}" class="weather-icon">
+        <p class="temp">${isCurrentDay && currentData ? currentData.temp_c : forecastData.day.avgtemp_c}°C</p>
+        <p class="desc">${forecastData.day.condition.text}</p>
+        <div class="weather-details" style="display: none;">
+            <p><i class="fas fa-tint"></i> ${forecastData.day.avghumidity}%</p>
+            <p><i class="fas fa-wind"></i> ${forecastData.day.maxwind_kph} km/h</p>
+            <p><i class="fas fa-sun"></i> UV: ${forecastData.day.uv}</p>
+            <p><i class="fas fa-cloud-rain"></i> ${forecastData.day.daily_chance_of_rain}%</p>
+            <p><i class="fas fa-temperature-high"></i> ${forecastData.day.maxtemp_c}°C</p>
+            <p><i class="fas fa-temperature-low"></i> ${forecastData.day.mintemp_c}°C</p>
+        </div>
+        <button class="btn btn-link btn-sm mt-2 show-more">Show More</button>
+        <button class="btn btn-link btn-sm mt-2 show-less" style="display: none;">Show Less</button>
+    `;
+
+    const showMoreBtn = card.querySelector('.show-more');
+    const showLessBtn = card.querySelector('.show-less');
+    const detailsDiv = card.querySelector('.weather-details');
+
+    showMoreBtn.addEventListener('click', () => {
+        detailsDiv.style.display = 'block';
+        showMoreBtn.style.display = 'none';
+        showLessBtn.style.display = 'inline-block';
+    });
+
+    showLessBtn.addEventListener('click', () => {
+        detailsDiv.style.display = 'none';
+        showMoreBtn.style.display = 'inline-block';
+        showLessBtn.style.display = 'none';
+    });
+
+    return card;
 }
 
 function setTimeIcon(hour) {
@@ -238,3 +272,18 @@ function showSuccessToast(message) {
         toast.show();
     }
 }
+
+// Add this new function at the end of the file
+function addWheelScrolling() {
+    const scrollWrapper = document.querySelector('.forecast-scroll-wrapper');
+    scrollWrapper.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        scrollWrapper.scrollLeft += e.deltaY;
+    });
+}
+
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    getWeatherData(lastValidCity);
+    addWheelScrolling();
+});

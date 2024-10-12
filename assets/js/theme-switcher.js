@@ -10,8 +10,69 @@ document.addEventListener('DOMContentLoaded', function() {
     colorOptions.forEach(option => {
       option.classList.toggle('active', option.dataset.color === color);
     });
-    updateButtonColors();
-    updateModalColors(color);
+    updateColors(color);
+  }
+
+  function updateColors(color) {
+    const mainColor = color || getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    
+    // Update button colors
+    const buttons = document.querySelectorAll('.btn-primary');
+    buttons.forEach(button => {
+      button.style.backgroundColor = mainColor;
+      button.style.borderColor = mainColor;
+    });
+
+    // Update navbar colors
+    const navbar = document.querySelector('.navbar');
+    const navbarBrand = document.querySelector('.navbar-brand');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    if (navbar) {
+      navbar.style.color = mainColor;
+    }
+    if (navbarBrand) {
+      navbarBrand.style.color = mainColor;
+    }
+    navLinks.forEach(link => {
+      link.style.color = mainColor;
+    });
+
+    // Update footer colors
+    const footer = document.querySelector('footer');
+    const footerLinks = document.querySelectorAll('footer a');
+    const socialIcons = document.querySelectorAll('.social-icons a');
+    const footerInput = document.querySelector('footer .subscribe-form .form-control');
+    const footerButton = document.querySelector('footer .subscribe-form .btn-primary');
+    
+    if (footer) {
+      footer.style.setProperty('--main-color', mainColor);
+    }
+    footerLinks.forEach(link => {
+      link.style.color = mainColor;
+    });
+    socialIcons.forEach(icon => {
+      icon.style.color = mainColor;
+    });
+    if (footerInput) {
+      footerInput.style.borderColor = mainColor;
+    }
+    if (footerButton) {
+      footerButton.style.backgroundColor = mainColor;
+      footerButton.style.borderColor = mainColor;
+    }
+
+    // Update city name color
+    const cityName = document.getElementById('cityName');
+    if (cityName) {
+      cityName.style.color = mainColor;
+    }
+
+    // Update current day border
+    const currentDay = document.querySelector('.current-day');
+    if (currentDay) {
+      currentDay.style.borderColor = mainColor;
+    }
   }
 
   function updateButtonColors() {
@@ -44,6 +105,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const navbar = document.querySelector('.navbar');
     const footer = document.querySelector('footer');
     const modals = document.querySelectorAll('.modal-content');
+    const footerInput = document.querySelector('footer .subscribe-form .form-control');
+    const weatherResult = document.getElementById('weatherResult');
+    const weatherCards = document.querySelectorAll('.weather-card');
 
     if (isDarkMode) {
       navbar.classList.add('navbar-dark', 'bg-dark');
@@ -54,6 +118,18 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.add('bg-dark', 'text-white');
         modal.classList.remove('bg-light', 'text-dark');
       });
+      if (footerInput) {
+        footerInput.classList.add('bg-dark', 'text-white');
+        footerInput.classList.remove('bg-light', 'text-dark');
+      }
+      if (weatherResult) {
+        weatherResult.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        weatherResult.style.color = '#fff';
+      }
+      weatherCards.forEach(card => {
+        card.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+        card.style.color = '#fff';
+      });
     } else {
       navbar.classList.add('navbar-light', 'bg-light');
       navbar.classList.remove('navbar-dark', 'bg-dark');
@@ -63,20 +139,58 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.add('bg-light', 'text-dark');
         modal.classList.remove('bg-dark', 'text-white');
       });
+      if (footerInput) {
+        footerInput.classList.add('bg-light', 'text-dark');
+        footerInput.classList.remove('bg-dark', 'text-white');
+      }
+      if (weatherResult) {
+        weatherResult.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+        weatherResult.style.color = '#333';
+      }
+      weatherCards.forEach(card => {
+        card.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+        card.style.color = '#333';
+      });
     }
 
-    updateButtonColors();
     updateModeLabel(isDarkMode);
+    updateColors();
   }
 
   switcherBtn.addEventListener('click', function() {
     switcherPanel.classList.toggle('open');
   });
 
+  function setThemeColor(color) {
+    document.documentElement.style.setProperty('--theme-color', color);
+    localStorage.setItem('themeColor', color);
+    
+    // Update the border color of the current day
+    const currentDay = document.querySelector('.current-day');
+    if (currentDay) {
+        currentDay.style.borderColor = color;
+    }
+  }
+
+  function updateCurrentDayBorder() {
+    const currentDay = document.querySelector('.current-day');
+    const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-color').trim();
+    if (currentDay && themeColor) {
+        currentDay.style.borderColor = themeColor;
+    }
+  }
+
+  function updateCityNameColor(color) {
+    const cityName = document.getElementById('cityName');
+    if (cityName) {
+      cityName.style.color = color;
+    }
+  }
+
   colorOptions.forEach(option => {
     option.style.backgroundColor = option.dataset.color;
-    option.addEventListener('click', function() {
-      const color = this.dataset.color;
+    option.addEventListener('click', () => {
+      const color = option.getAttribute('data-color');
       applyTheme(color);
       localStorage.setItem('themeColor', color);
     });
