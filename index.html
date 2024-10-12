@@ -137,23 +137,33 @@
         </div>
     </div>
 
-    <!-- Register Form (initially hidden) -->
-    <div id="registerForm" class="d-none">
-        <h5 class="modal-title">Register</h5>
-        <form>
-            <div class="mb-3">
-                <input type="text" class="form-control" id="registerName" placeholder="Enter your name" required>
+    <!-- Sign Up Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="signupMessage" class="alert" style="display: none;"></div>
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="signupName" placeholder="Enter your name" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="signupPassword" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    </form>
+                    <hr>
+                    <p class="text-center">Already have an account? <a href="#" id="showLoginForm" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></p>
+                </div>
             </div>
-            <div class="mb-3">
-                <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email" required>
-            </div>
-            <div class="mb-3">
-                <input type="password" class="form-control" id="registerPassword" placeholder="Enter your password" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Register</button>
-        </form>
-        <hr>
-        <p class="text-center">Already have an account? <a href="#" id="showLoginForm" class="login-link">Login</a></p>
+        </div>
     </div>
 
     <!-- Theme Switcher -->
@@ -183,54 +193,8 @@
     <!-- Custom JS -->
     <script src="assets/js/weather.js"></script>
     <script src="assets/js/theme-switcher.js"></script>
-
-    <!-- Replace the existing Signup Modal content with this updated version -->
-    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="signupForm">
-                        <div class="mb-3">
-                            <input type="text" class="form-control" id="signupName" placeholder="Enter your name" required>
-                            <div id="nameError" class="invalid-feedback"></div>
-                        </div>
-                        <div class="mb-3">
-                            <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email" required>
-                            <div id="emailError" class="invalid-feedback"></div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                            <input type="password" class="form-control" id="signupPassword" placeholder="Enter your password" required>
-                            <i id="passwordToggle" class="fas fa-eye position-absolute end-0 top-50 translate-middle-y me-2" style="cursor: pointer;" onclick="togglePasswordVisibility()"></i>
-                            <div id="passwordError" class="invalid-feedback"></div>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-                    </form>
-                    <hr>
-                    <p class="text-center">Already have an account? <a href="#" id="showLoginForm" class="login-link" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Toast -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">Success</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                <!-- The message will be set dynamically -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Add this line before the closing </body> tag -->
     <script src="assets/js/signup.js"></script>
+    <script src="assets/js/login.js"></script>
 
 </body>
 </html>

@@ -137,81 +137,104 @@ signupForm.addEventListener('submit', (e) => {
 });
 
 // Login functionality
-document.addEventListener('DOMContentLoaded', () => {
+function initializeLoginFunctionality() {
     const loginForm = document.getElementById('loginForm');
     const loginEmail = document.getElementById('loginEmail');
     const loginPassword = document.getElementById('loginPassword');
     const loginMessage = document.getElementById('loginMessage');
 
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = loginEmail.value.trim();
-        const password = loginPassword.value.trim();
-        
-        // Get users from localStorage
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        
-        // Check if user exists
-        const user = users.find(u => u.email === email && u.password === password);
-        
-        if (user) {
-            // Login successful
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            updateUIForLoggedInUser(user);
-            closeLoginModal();
-            showSuccessToast('Login successful!');
-        } else {
-            // Login failed
-            showLoginMessage('Invalid email or password', 'danger');
-        }
-    });
-
-    function showLoginMessage(message, type) {
-        loginMessage.textContent = message;
-        loginMessage.className = `alert alert-${type}`;
-        loginMessage.style.display = 'block';
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginEmail.value.trim();
+            const password = loginPassword.value.trim();
+            
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Check if user exists
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Login successful
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                updateUIForLoggedInUser(user);
+                closeLoginModal();
+                showSuccessToast('Login successful!');
+            } else {
+                // Login failed
+                showLoginMessage('Invalid email or password', 'danger');
+            }
+        });
+    } else {
+        console.error('Login form not found');
     }
+}
 
-    function updateUIForLoggedInUser(user) {
-        const navbarLoginItem = document.querySelector('.nav-item:has(.nav-link[data-bs-target="#loginModal"])');
-        if (navbarLoginItem) {
-            navbarLoginItem.innerHTML = `
-                <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Welcome, ${user.name}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#" id="signOutButton">Sign Out</a></li>
-                    </ul>
-                </div>
-            `;
-            document.getElementById('signOutButton').addEventListener('click', signOut);
-        }
-    }
-
-    function signOut(e) {
-        e.preventDefault();
-        localStorage.removeItem('currentUser');
-        location.reload();
-    }
-
-    function closeLoginModal() {
-        const loginModal = document.getElementById('loginModal');
-        const modal = bootstrap.Modal.getInstance(loginModal);
-        modal.hide();
-    }
-
-    function showSuccessToast(message) {
-        const toastElement = document.getElementById("successToast");
-        const toastBody = toastElement.querySelector('.toast-body');
-        toastBody.textContent = message;
-        const toast = new bootstrap.Toast(toastElement);
-        toast.show();
-    }
-
+// Call this function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    getWeatherData(lastValidCity);
+    initializeLoginFunctionality();
+    
     // Check if user is logged in on page load
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser) {
         updateUIForLoggedInUser(currentUser);
     }
 });
+
+function showLoginMessage(message, type) {
+    if (loginMessage) {
+        loginMessage.textContent = message;
+        loginMessage.className = `alert alert-${type}`;
+        loginMessage.style.display = 'block';
+    }
+}
+
+function updateUIForLoggedInUser(user) {
+    const navbarLoginItem = document.querySelector('.nav-item:has(.nav-link[data-bs-target="#loginModal"])');
+    if (navbarLoginItem) {
+        navbarLoginItem.innerHTML = `
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Welcome, ${user.name}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="#" id="signOutButton">Sign Out</a></li>
+                </ul>
+            </div>
+        `;
+        const signOutButton = document.getElementById('signOutButton');
+        if (signOutButton) {
+            signOutButton.addEventListener('click', signOut);
+        }
+    }
+}
+
+function signOut(e) {
+    e.preventDefault();
+    localStorage.removeItem('currentUser');
+    location.reload();
+}
+
+function closeLoginModal() {
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        const modal = bootstrap.Modal.getInstance(loginModal);
+        if (modal) {
+            modal.hide();
+        }
+    }
+}
+
+function showSuccessToast(message) {
+    const toastElement = document.getElementById("successToast");
+    if (toastElement) {
+        const toastBody = toastElement.querySelector('.toast-body');
+        if (toastBody) {
+            toastBody.textContent = message;
+        }
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+    }
+}

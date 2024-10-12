@@ -208,6 +208,9 @@ function signup() {
   users.push(newUser);
   localStorage.setItem("users", JSON.stringify(users));
   
+  console.log('New user registered:', newUser); // Debug log
+  console.log('Updated users list:', JSON.parse(localStorage.getItem('users'))); // Debug log
+  
   // Log the user in
   localStorage.setItem("currentUser", JSON.stringify(newUser));
 
@@ -367,3 +370,92 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUIForLoggedInUser(currentUser);
   }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const signupForm = document.getElementById('signupForm');
+    const signupName = document.getElementById('signupName');
+    const signupEmail = document.getElementById('signupEmail');
+    const signupPassword = document.getElementById('signupPassword');
+    const signupMessage = document.getElementById('signupMessage');
+
+    if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            signup();
+        });
+    }
+});
+
+function signup() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
+    
+    // Basic validation
+    if (!name || !email || !password) {
+        showSignupMessage('Please fill in all fields', 'danger');
+        return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showSignupMessage('Please enter a valid email address', 'danger');
+        return;
+    }
+
+    // Password validation (e.g., at least 6 characters)
+    if (password.length < 6) {
+        showSignupMessage('Password must be at least 6 characters long', 'danger');
+        return;
+    }
+
+    // Get existing users from localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    // Check if user already exists
+    if (users.some(u => u.email === email)) {
+        showSignupMessage('Email already registered', 'danger');
+        return;
+    }
+    
+    // Add new user
+    const newUser = { name, email, password };
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    console.log('New user registered:', newUser); // Debug log
+    console.log('Updated users list:', JSON.parse(localStorage.getItem('users'))); // Debug log
+    
+    // Auto-login the new user
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    
+    // Show success message and update UI
+    showSignupMessage('Registration successful!', 'success');
+    updateUIForLoggedInUser(newUser);
+    closeSignupModal();
+    showSuccessToast('Welcome, ' + name + '!');
+}
+
+function showSignupMessage(message, type) {
+    const signupMessage = document.getElementById('signupMessage');
+    if (signupMessage) {
+        signupMessage.textContent = message;
+        signupMessage.className = `alert alert-${type}`;
+        signupMessage.style.display = 'block';
+    }
+}
+
+function closeSignupModal() {
+    const signupModal = document.getElementById('signupModal');
+    if (signupModal) {
+        const modal = bootstrap.Modal.getInstance(signupModal);
+        if (modal) {
+            modal.hide();
+        }
+    }
+}
+
+// These functions are already defined in login.js, so we don't need to redefine them here
+// updateUIForLoggedInUser(user)
+// showSuccessToast(message)
