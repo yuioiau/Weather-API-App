@@ -522,11 +522,10 @@ footer a:hover, .social-icons a:hover {
     width: 180px;
     margin-right: 15px;
     margin-left: 15px;
-    margin-bottom: 5px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 15px;
-    transition: all 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
     color: var(--text-color);
     position: relative;
     overflow: hidden;
@@ -536,24 +535,22 @@ footer a:hover, .social-icons a:hover {
 .weather-card::before {
     content: '';
     position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, var(--main-color), transparent, var(--main-color));
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom right, var(--main-color), transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
-    border-radius: 10px;
-    z-index: -1;
 }
 
 .weather-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .weather-card:hover::before {
-    opacity: 1;
+    opacity: 0.1;
 }
 
 .dark-mode .weather-card {
@@ -561,7 +558,7 @@ footer a:hover, .social-icons a:hover {
 }
 
 .dark-mode .weather-card:hover {
-    box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.05);
 }
 
 .weather-card.current-day {
@@ -570,8 +567,7 @@ footer a:hover, .social-icons a:hover {
 }
 
 .weather-card.current-day:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Adjust the content inside the card for better visibility on hover */
@@ -580,9 +576,9 @@ footer a:hover, .social-icons a:hover {
     z-index: 2;
 }
 
-/* Optional: Add a subtle rotation to the weather icon on hover */
+/* Optional: Add a subtle scale to the weather icon on hover */
 .weather-card:hover .weather-icon {
-    transform: rotate(5deg) scale(1.1);
+    transform: scale(1.05);
     transition: transform 0.3s ease;
 }
 

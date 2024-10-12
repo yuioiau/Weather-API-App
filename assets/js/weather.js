@@ -281,9 +281,9 @@ function addWheelScrolling() {
         scrollWrapper.scrollLeft += e.deltaY;
     });
 }
-
 // Call this function when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     getWeatherData(lastValidCity);
     addWheelScrolling();
 });
+
