@@ -116,9 +116,25 @@ body.dark-mode .card {
     color: #ffffff;
 }
 
+body.dark-mode .navbar {
+    background-color: #2c2c2c !important;
+}
+
+body.dark-mode footer {
+    background-color: #2c2c2c !important;
+}
+
 body.dark-mode .switcher-panel {
     background-color: #2c2c2c;
     color: #ffffff;
+}
+
+body.dark-mode .weather-day {
+    background-color: #3c3c3c;
+}
+
+body.dark-mode #cityName {
+    color: var(--main-color);
 }
 
 @media (max-width: 768px) {
@@ -141,8 +157,10 @@ body.dark-mode .switcher-panel {
 }
 
 .current-day {
-    background-color: rgba(var(--main-color-rgb), 0.2);
-    border: 2px solid var(--main-color);
+    background-color: rgba(23, 162, 184, 0.2);
+    border: 2px solid #17a2b8;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
 }
 
 .weather-icon {
@@ -151,9 +169,15 @@ body.dark-mode .switcher-panel {
     margin: 10px 0;
 }
 
+.current-day .weather-icon {
+    width: 80px;
+    height: 80px;
+}
+
 #cityName {
     color: var(--main-color);
     margin-bottom: 20px;
+    font-size: 2.5rem;
 }
 
 .card {
@@ -164,3 +188,110 @@ body.dark-mode .switcher-panel {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+/* Add these new styles */
+.current-day #todayTemp {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.current-day #todayDesc {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* Add these styles at the end of your existing CSS */
+
+#currentDateTime {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+#timeIcon {
+    margin-bottom: 20px;
+}
+
+.fa-sun {
+    color: #ffd700;
+}
+
+.fa-moon {
+    color: #c2c2c2;
+}
+
+.fa-sunset {
+    color: #ff7f50;
+}
+
+/* Add these styles */
+body:not(.dark-mode) .navbar {
+    background-color: #f8f9fa !important;
+}
+
+body:not(.dark-mode) .navbar-brand,
+body:not(.dark-mode) .nav-link {
+    color: #333 !important;
+}
+
+body:not(.dark-mode) footer {
+    background-color: #f8f9fa !important;
+    color: #333 !important;
+}
+
+.register-link, .login-link {
+    color: var(--main-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.register-link:hover, .login-link:hover {
+    color: #138496;
+    text-decoration: underline;
+}
+
+#loginModal .modal-body {
+    position: relative;
+}
+
+#registerForm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    background-color: inherit;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+}
+
+#registerForm.active {
+    transform: translateX(0);
+}
+
+/* Modal styles */
+.modal-content {
+    border: 2px solid var(--main-color);
+}
+
+.modal-header {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+body.dark-mode .modal-content {
+    background-color: #2c2c2c;
+    color: #ffffff;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: #444;
+}
+
+body.dark-mode .modal-footer {
+    border-top-color: #444;
+}
+
+body.dark-mode .close {
+    color: #fff;
+}

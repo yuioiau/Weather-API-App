@@ -1,47 +1,72 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const switcher = document.getElementById('theme-switcher');
-  const switcherBtn = switcher.querySelector('.switcher-btn');
-  const switcherPanel = switcher.querySelector('.switcher-panel');
-  const colorOptions = switcher.querySelectorAll('.color-options li');
+  const switcherBtn = document.querySelector('.switcher-btn');
+  const switcherPanel = document.querySelector('.switcher-panel');
+  const colorOptions = document.querySelectorAll('.color-options li');
   const darkModeSwitch = document.getElementById('darkModeSwitch');
   const modeLabel = document.getElementById('modeLabel');
 
   function applyTheme(color) {
     document.documentElement.style.setProperty('--main-color', color);
-    colorOptions.forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.color === color);
-      opt.style.backgroundColor = opt.dataset.color;
+    colorOptions.forEach(option => {
+      option.classList.toggle('active', option.dataset.color === color);
     });
     updateButtonColors();
-    updateLogoutButtonColor();
-    updateLogoutButtonHoverColor();
-    updateToastStyles();
+    updateModalColors(color);
   }
 
   function updateButtonColors() {
-    const buttons = document.querySelectorAll('.btn-outline-info');
-    buttons.forEach(button => {
-      button.style.color = getComputedStyle(document.documentElement).getPropertyValue('--main-color');
-      button.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color');
-    });
-  }
-
-  function updateToastStyles() {
-    const toasts = document.querySelectorAll('.toast');
+    const buttons = document.querySelectorAll('.btn-primary');
     const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
-    toasts.forEach(toast => {
-      toast.style.backgroundColor = mainColor;
-      toast.style.color = isColorLight(mainColor) ? '#000' : '#fff';
+    buttons.forEach(button => {
+      button.style.backgroundColor = mainColor;
+      button.style.borderColor = mainColor;
     });
   }
 
-  function isColorLight(color) {
-    const hex = color.replace('#', '');
-    const c_r = parseInt(hex.substr(0, 2), 16);
-    const c_g = parseInt(hex.substr(2, 2), 16);
-    const c_b = parseInt(hex.substr(4, 2), 16);
-    const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
-    return brightness > 155;
+  function updateModalColors(color) {
+    const modals = document.querySelectorAll('.modal-content');
+    modals.forEach(modal => {
+      modal.style.borderColor = color;
+    });
+    const modalHeaders = document.querySelectorAll('.modal-header');
+    modalHeaders.forEach(header => {
+      header.style.backgroundColor = color;
+      header.style.color = '#fff';
+    });
+  }
+
+  function updateModeLabel(isDarkMode) {
+    modeLabel.textContent = isDarkMode ? 'Dark Mode' : 'Light Mode';
+  }
+
+  function toggleDarkMode(isDarkMode) {
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    const navbar = document.querySelector('.navbar');
+    const footer = document.querySelector('footer');
+    const modals = document.querySelectorAll('.modal-content');
+
+    if (isDarkMode) {
+      navbar.classList.add('navbar-dark', 'bg-dark');
+      navbar.classList.remove('navbar-light', 'bg-light');
+      footer.classList.add('bg-dark', 'text-white');
+      footer.classList.remove('bg-light', 'text-dark');
+      modals.forEach(modal => {
+        modal.classList.add('bg-dark', 'text-white');
+        modal.classList.remove('bg-light', 'text-dark');
+      });
+    } else {
+      navbar.classList.add('navbar-light', 'bg-light');
+      navbar.classList.remove('navbar-dark', 'bg-dark');
+      footer.classList.add('bg-light', 'text-dark');
+      footer.classList.remove('bg-dark', 'text-white');
+      modals.forEach(modal => {
+        modal.classList.add('bg-light', 'text-dark');
+        modal.classList.remove('bg-dark', 'text-white');
+      });
+    }
+
+    updateButtonColors();
+    updateModeLabel(isDarkMode);
   }
 
   switcherBtn.addEventListener('click', function() {
@@ -59,51 +84,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   darkModeSwitch.addEventListener('change', function() {
     const isDarkMode = this.checked;
-    document.body.classList.toggle('dark-mode', isDarkMode);
+    toggleDarkMode(isDarkMode);
     localStorage.setItem('darkMode', isDarkMode.toString());
-    updateButtonColors();
-    updateLogoutButtonColor();
-    updateLogoutButtonHoverColor();
-    updateModeLabel(isDarkMode);
   });
 
   const savedColor = localStorage.getItem('themeColor') || '#17a2b8';
   const savedDarkMode = localStorage.getItem('darkMode') === 'true';
 
   applyTheme(savedColor);
-
-  if (savedDarkMode) {
-    document.body.classList.add('dark-mode');
-    darkModeSwitch.checked = true;
-  }
-
-  updateModeLabel(savedDarkMode);
-
-  updateButtonColors();
-
-  function updateLogoutButtonColor() {
-    const logoutButton = document.querySelector('.btn-outline-theme');
-    if (logoutButton) {
-      logoutButton.style.color = getComputedStyle(document.documentElement).getPropertyValue('--main-color');
-      logoutButton.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color');
-    }
-  }
-
-  function updateLogoutButtonHoverColor() {
-    const style = document.createElement('style');
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    const hoverColor = isDarkMode ? getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() : getComputedStyle(document.documentElement).getPropertyValue('--dark-color').trim();
-    
-    style.textContent = `
-      .btn-outline-theme:hover {
-        color: ${hoverColor} !important;
-      }
-    `;
-    
-    document.head.appendChild(style);
-  }
-
-  function updateModeLabel(isDarkMode) {
-    modeLabel.textContent = isDarkMode ? 'Dark Mode' : 'Light Mode';
-  }
+  toggleDarkMode(savedDarkMode);
+  darkModeSwitch.checked = savedDarkMode;
 });

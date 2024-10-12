@@ -66,17 +66,17 @@ function validateEmail() {
 
 function validatePassword() {
   if (signupPassword.value.trim() === "") {
-    showInputSuccess(signupPassword, passwordError);
-    return true;
+    showInputError(signupPassword, passwordError, "Password is required.");
+    return false;
   }
   const password = signupPassword.value;
   const strength = checkPasswordStrength(password);
 
-  if (password.length < 6) {
+  if (password.length < 8) {
     showInputError(
       signupPassword,
       passwordError,
-      "Password must be at least 6 characters long."
+      "Password must be at least 8 characters long."
     );
     return false;
   }
@@ -85,7 +85,7 @@ function validatePassword() {
     showInputError(
       signupPassword,
       passwordError,
-      "Password is too weak. Please choose a stronger password."
+      "Password is too weak. It should contain uppercase, lowercase, numbers, and special characters."
     );
     return false;
   }
@@ -192,26 +192,9 @@ function signup() {
     return;
   }
 
-  // Check for existing name and email
-  if (
-    users.some(
-      (user) => user.name.toLowerCase() === signupName.value.toLowerCase()
-    )
-  ) {
-    showInputError(signupName, nameError, "This name is already taken.");
-    return;
-  }
-
-  if (
-    users.some(
-      (user) => user.email.toLowerCase() === signupEmail.value.toLowerCase()
-    )
-  ) {
-    showInputError(
-      signupEmail,
-      emailError,
-      "This email is already registered."
-    );
+  // Check for existing email
+  if (users.some(user => user.email.toLowerCase() === signupEmail.value.toLowerCase())) {
+    showInputError(signupEmail, emailError, "This email is already registered.");
     return;
   }
 
@@ -224,18 +207,55 @@ function signup() {
 
   users.push(newUser);
   localStorage.setItem("users", JSON.stringify(users));
+  
+  // Log the user in
   localStorage.setItem("currentUser", JSON.stringify(newUser));
 
-  // Reset input styles before showing success
-  resetInputStyles();
-
+  // Show success toast
   showSuccessToast();
+
+  // Clear the form
   clearForm();
 
-  // Redirect to home page after 2 seconds
-  setTimeout(() => {
-    window.location.href = "home.html";
-  }, 2000);
+  // Close the signup modal
+  const signupModalInstance = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
+  if (signupModalInstance) {
+    signupModalInstance.hide();
+  }
+
+  // Update UI for logged-in user
+  updateUIForLoggedInUser(newUser);
+}
+
+function showSuccessToast() {
+  const toastElement = document.getElementById("successToast");
+  const toast = new bootstrap.Toast(toastElement);
+  toast.show();
+}
+
+function updateUIForLoggedInUser(user) {
+  const navbarLoginItem = document.querySelector('.nav-item:has(.nav-link[data-bs-target="#loginModal"])');
+  if (navbarLoginItem) {
+    navbarLoginItem.innerHTML = `
+      <div class="dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Welcome, ${user.name}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item" href="#" id="signOutButton">Sign Out</a></li>
+        </ul>
+      </div>
+    `;
+
+    // Add event listener for sign out
+    document.getElementById('signOutButton').addEventListener('click', signOut);
+  }
+}
+
+function signOut(e) {
+  e.preventDefault();
+  localStorage.removeItem('currentUser');
+  location.reload();
 }
 
 function resetInputStyles() {
@@ -271,13 +291,9 @@ function clearForm() {
   );
 }
 
-function showSuccessToast() {
-  const toastElement = document.getElementById("successToast");
-  const toast = new bootstrap.Toast(toastElement);
-  toast.show();
+function resetInputStyle(input) {
+  input.classList.remove("is-valid", "is-invalid", "validating");
 }
-
-document.querySelector("button").addEventListener("click", signup);
 
 function updatePasswordStrength() {
   const password = signupPassword.value;
@@ -320,8 +336,34 @@ function updatePasswordStrength() {
   }
 }
 
-signupPassword.removeEventListener("blur", resetInputStyle);
-
-function resetInputStyle(input) {
-  input.classList.remove("is-valid", "is-invalid", "validating");
+function togglePasswordVisibility() {
+  const passwordInput = document.getElementById("signupPassword");
+  const eyeIcon = document.getElementById("passwordToggle");
+  
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIcon.classList.remove("fa-eye");
+    eyeIcon.classList.add("fa-eye-slash");
+  } else {
+    passwordInput.type = "password";
+    eyeIcon.classList.remove("fa-eye-slash");
+    eyeIcon.classList.add("fa-eye");
+  }
 }
+
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  signup();
+});
+
+// Add event listeners for real-time validation
+signupName.addEventListener("input", validateName);
+signupEmail.addEventListener("input", validateEmail);
+signupPassword.addEventListener("input", validatePassword);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (currentUser) {
+    updateUIForLoggedInUser(currentUser);
+  }
+});
